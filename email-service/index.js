@@ -7,7 +7,7 @@ await redis.connect();
 
 console.log("Email Service Running...");
 
-let lastId = "0";   // <-- important
+let lastId = "$";   // Start from the latest message
 
 while (true) {
     const response = await redis.xRead(
