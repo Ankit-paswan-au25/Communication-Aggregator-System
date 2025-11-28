@@ -1,4 +1,14 @@
 /node_modules
-logging-service/node_modules
-msg-delivery-service/node_modules
 task-router-service/node_modules
+
+logging-service/node_modules
+logging-service/.env
+
+sms-service/node_modules
+sms-service/.env
+
+whatsapp-service/node_modules
+whatsapp-service/.env
+
+email-service/node_modules
+email-service/.env

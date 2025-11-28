@@ -1,5 +1,5 @@
 {
-  "name": "logging-service",
+  "name": "sms-service",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^17.2.3",
-    "redis": "^5.10.0"
+    "redis": "^5.10.0",
+    "twilio": "^5.10.6"
   }
 }
