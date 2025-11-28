@@ -1,5 +1,6 @@
 /node_modules
 task-router-service/node_modules
+task-router-service/.env
 
 logging-service/node_modules
 logging-service/.env
