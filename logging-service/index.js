@@ -7,7 +7,7 @@ await redis.connect();
 
 console.log("📝 Logging Service Running...");
 
-let lastId = "0";
+let lastId = "$";
 
 while (true) {
     const response = await redis.xRead(
