@@ -1,6 +1,7 @@
 import { createClient } from "redis";
 import twilio from "twilio";
 import dotenv from "dotenv";
+import { indexLog } from "./config/elasticsearch.js";
 
 dotenv.config();
 
@@ -42,8 +43,29 @@ while (true) {
             });
 
             console.log("SMS Sent Successfully:", result.sid);
+
+            // Index success log to Elasticsearch
+            await indexLog({
+                service: "sms",
+                status: "sent",
+                from: msg.message.from || '',
+                to: msg.message.to || to,
+                msg: msg.message.msg || body,
+                communicationId: msg.message._id || ''
+            });
         } catch (err) {
             console.error("SMS Send Failed:", err.message);
+
+            // Index error log to Elasticsearch
+            await indexLog({
+                service: "sms",
+                status: "failed",
+                from: msg.message.from || '',
+                to: msg.message.to || to,
+                msg: msg.message.msg || body,
+                error: err.message,
+                communicationId: msg.message._id || ''
+            });
         }
 
         lastId = msg.id;
