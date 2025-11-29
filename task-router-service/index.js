@@ -4,9 +4,18 @@ import express from "express";
 import { createClient } from "redis";
 import { dbConnection } from "./config/dbConfig.js";
 import { communication } from "./model/communication.js";
+import { initializeIndices, indexCommunication } from "./config/elasticsearch.js";
 
 // Connect to DB
 await dbConnection();
+
+// Initialize Elasticsearch indices
+try {
+    await initializeIndices();
+} catch (error) {
+    console.error('⚠️ Warning: Elasticsearch initialization failed. Service will continue but indexing may not work.');
+    console.error('Error details:', error.message);
+}
 
 const app = express();
 app.use(express.json());
@@ -50,6 +59,17 @@ app.post("/api/v1/communication", async (req, res) => {
             to: data.to,
             msg: data.msg,
             status: 'pending'
+        });
+
+        // Index communication to Elasticsearch
+        await indexCommunication({
+            communicationId: newCommunication._id.toString(),
+            from: newCommunication.from,
+            to: newCommunication.to,
+            msg: newCommunication.msg,
+            status: newCommunication.status,
+            type: type,
+            stream: stream
         });
 
         // Push task to Redis stream
